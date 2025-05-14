@@ -1,0 +1,122 @@
+import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'sap_form_page.dart'; // Import SAP form page
+
+class EmergencyFundPage extends StatelessWidget {
+  const EmergencyFundPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Emergency Fund Assistance"),
+      ),
+      body: FutureBuilder<DocumentSnapshot>(
+        future: FirebaseFirestore.instance.collection('sapInfo').doc('olFedliLFsoWraqYjxo2').get(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          }
+
+          if (snapshot.hasError) {
+            return Center(child: Text("Error fetching data: ${snapshot.error}"));
+          }
+
+          if (!snapshot.hasData || !snapshot.data!.exists) {
+            return Center(child: Text("No data available"));
+          }
+
+          var data = snapshot.data!.data() as Map<String, dynamic>;
+
+          return SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Overview of SAP
+                  _buildSection("Overview of SAP", data['overview'], color: Colors.blue),
+
+                  SizedBox(height: 20),
+
+                  // Eligibility Criteria
+                  _buildSection("Eligibility Criteria", data['eligibility'], color: Colors.green),
+
+                  SizedBox(height: 20),
+
+                  // Application Process
+                  _buildSection("Application Process", data['applicationProcess'], isList: true, color: Colors.orange),
+
+                  SizedBox(height: 20),
+
+                  // Financial Assistance
+                  _buildSection("Financial Assistance", data['financialAssistance'], isList: true, color: Colors.red),
+
+                  // Add button for Fill SAP Form
+                  SizedBox(height: 20),
+                 ElevatedButton(
+  onPressed: () {
+    // Navigate to the SAP Form Page
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => SAPFormPage()),
+    );
+  },
+  child: Text("SAP Form"),
+  style: ElevatedButton.styleFrom(
+    backgroundColor: Colors.blue, // Correct property to set background color
+    padding: EdgeInsets.symmetric(horizontal: 160, vertical: 15),
+    textStyle: TextStyle(fontSize: 18),
+  ),
+)
+
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  // Build the content section (either text or list)
+  Widget _buildSection(String title, dynamic content, {bool isList = false, required Color color}) {
+    if (isList && content is List) {
+      // If content is a list, build it as a list
+      return Container(
+        padding: EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: color.withOpacity(0.2),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(title, style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: color)),
+            SizedBox(height: 10),
+            ...List.generate(content.length, (index) {
+              return Text("- ${content[index]}", style: TextStyle(fontSize: 18, color: color));
+            }),
+          ],
+        ),
+      );
+    } else {
+      // If content is not a list, show as normal text
+      return Container(
+        padding: EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: color.withOpacity(0.2),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(title, style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: color)),
+            SizedBox(height: 10),
+            Text(content ?? "No information available", style: TextStyle(fontSize: 18, color: color)),
+          ],
+        ),
+      );
+    }
+  }
+}

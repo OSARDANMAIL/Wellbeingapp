@@ -1,0 +1,57 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "wellbeingapp-328b7",
+          "appId": "1:914446915892:android:84e5ea711219a88fec6d61",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "ios": {
+        "default": {
+          "projectId": "wellbeingapp-328b7",
+          "appId": "1:914446915892:ios:60f851502610023fec6d61",
+          "uploadDebugSymbols": false,
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
+      "macos": {
+        "default": {
+          "projectId": "wellbeingapp-328b7",
+          "appId": "1:914446915892:ios:60f851502610023fec6d61",
+          "uploadDebugSymbols": false,
+          "fileOutput": "macos/Runner/GoogleService-Info.plist"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "wellbeingapp-328b7",
+          "configurations": {
+            "android": "1:914446915892:android:84e5ea711219a88fec6d61",
+            "ios": "1:914446915892:ios:60f851502610023fec6d61",
+            "macos": "1:914446915892:ios:60f851502610023fec6d61",
+            "web": "1:914446915892:web:22308325440fdf95ec6d61",
+            "windows": "1:914446915892:web:824ce0cbea37efc7ec6d61"
+          }
+        }
+      }
+    }
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ],
+      "predeploy": [
+        "npm --prefix \"$RESOURCE_DIR\" run lint"
+      ]
+    }
+  ]
+}
